@@ -12,9 +12,9 @@
 
 ## connectionRequestRouter
 - POST /request/send/:status/:userId
-status: "interested" , "ignore"
+> status: "interested" , "ignore"
 - POST /request/review/:status/:requestId
-status: "accepted" , "rejected"
+> status: "accepted" , "rejected"
 ## userRouter
 - GET /user/connections
 - GET /user/requests/recieved
