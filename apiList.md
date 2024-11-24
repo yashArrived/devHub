@@ -11,17 +11,10 @@
 - PATCH /profile/password
 
 ## connectionRequestRouter
-- POST /request/send/interested/:userId
-<!-- <!-- - POST /request/send/ignore/:userId -->
-Merged to ::::  -->
 - POST /request/send/:status/:userId
-
-
-- POST /request/review/accepted/:requestId
-- POST /request/review/rejected/:requestId
- Merged to : 
+status: "interested" , "ignore"
 - POST /request/review/:status/:requestId
-
+status: "accepted" , "rejected"
 ## userRouter
 - GET /user/connections
 - GET /user/requests/recieved
