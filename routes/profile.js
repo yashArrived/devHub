@@ -28,7 +28,7 @@ profileRouter.patch("/profile/edit" ,userAuth, async(req,res)=> {
 try{
     const data = req.body;
     
-    const ALLOWED_UPDATES  = ["age" , "skills" , "about" , "photoUrl" , "password"];
+    const ALLOWED_UPDATES  = ["age" ,"gender" ,"skills" , "about" , "photoUrl" , "password","firstName","lastName"];
         const isAllowedUpdates = Object.keys(data).every((k)=>
                     ALLOWED_UPDATES.includes(k)
         )

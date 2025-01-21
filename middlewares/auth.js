@@ -7,7 +7,7 @@ const userAuth = async(req,res,next)=>{
 try { 
      const {token} = req.cookies;
 if(!token){
-    throw new Error("Unauthorised access - Invalid token")
+   return res.status(401).send("You must be logged in")
 }
 const id = await jwt.verify(token  , "AAABBBCCC111");
 const {_id} = id;

@@ -43,9 +43,11 @@ userRouter.get("/user/connections" , userAuth , async(req,res)=>{
         ]
     }).populate("fromUserId" , "firstName lastName photoUrl age gender skills ")
     .populate("toUserId" , "firstName lastName photoUrl age gender skills ");
+console.log(connections);
 
     const data = connections.map((x)=>
-       loggedInUser._id.toString() === x.fromUserId.toString() ? x.toUserId : x.fromUserId);
+       loggedInUser._id.toString() === x.fromUserId._id.toString() ? x.toUserId : x.fromUserId);
+  console.log(data);
   
     if(!connections){
    return res.status(404).send({
@@ -62,11 +64,45 @@ userRouter.get("/user/connections" , userAuth , async(req,res)=>{
         res.status(400).send("Error occurred : "  + err.message);
       }
 })
-userRouter.get("/feed" ,userAuth ,async(req,res)=>{
+userRouter.get("/user/feed" ,userAuth ,async(req,res)=>{
 
     try{
 
+        const loggedInUser = req.user;
+        let page = parseInt(req.query.page) || 1;
+        let limit = parseInt(req.query.limit) || 10;
+        let skip = (page - 1 ) *limit;
+        const requests = await ConnectionRequestModel.find({
+            //not me
+            //not my connections 
+            
+                    $or:[
+                    {toUserId : loggedInUser._id },
+                    {fromUserId : loggedInUser._id}
+                    ]
+             
+            // not those whom i sent req
+            //not those who sent me frnd req.
+
+
+        }).select("toUserId fromUserId");
         
+        let hiddenUsers = new Set();
+
+        requests.forEach((user) => {
+            hiddenUsers.add(user.fromUserId);
+            hiddenUsers.add(user.toUserId);
+        })
+        hiddenUsers = Array.from(hiddenUsers)
+        const users = await User.find({
+                _id : {$nin : hiddenUsers}
+
+        }).select("fromUserId , firstName lastName photoUrl age gender skills ").skip(skip).limit(limit)
+        
+        res.send({
+            data :users
+        })
+
 
     }catch(err){
         res.status(400).json({

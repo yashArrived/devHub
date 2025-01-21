@@ -14,6 +14,10 @@ authRouter.post("/signUp" , async(req,res)=>{
     const{firstName,lastName , email,password } = data;
     //Encrypt the password
     
+
+   
+
+
     //Creating a new instance of User model
     // User.syncIndexes();
     try{
@@ -21,20 +25,30 @@ authRouter.post("/signUp" , async(req,res)=>{
         validateUser(req);
         
         const hashedpassword = await hashpassword(req);
-        const userObj = new User({
+        const userObj =  new User({
             firstName,
             lastName,
             email,
             password : hashedpassword
         });
-    await userObj.save();
-    res.send("User added successfully");
+    const newUser = await userObj.save();
+const token =  jwt.sign({_id : newUser._id} , "AAABBBCCC111")
+    // add the token to cookie and send the response back to the user 
+
+res.cookie("token" , token);
+
+    res.send( {   message : "User added successfully" , 
+        data : newUser,});
+        // console.log(data);
     }
+    
     catch (err) {
         console.error("Error occurred:"); // Logs the error to the terminal
         res.status(400).send({ error: err.message }); // Send error details to Postman
     }
 }); 
+
+
 
 
 authRouter.post("/login" , async(req,res)=> {
@@ -56,7 +70,7 @@ authRouter.post("/login" , async(req,res)=> {
                     // add the token to cookie and send the response back to the user 
 
             res.cookie("token" , token);
-            res.send("Logged in successfully");
+            res.send(user);
         }
         if(!isValid){
             throw new Error("Invalid Credentials");
@@ -68,6 +82,11 @@ authRouter.post("/login" , async(req,res)=> {
         res.status(400).send({ error: err.message }); // Send error details to Postman
     }
 })
+
+
+
+
+
 authRouter.post("/logout" , async(req,res)=>{
     try{
         // res.cookie("token" ,null ,{
