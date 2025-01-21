@@ -1,7 +1,7 @@
 // const { log } = require("console");
 // const express = require("express");
 const express = require("express")
-const dbConnect = require("./config/database");
+const dbConnect = require("./config/database")
 const cookieParser = require("cookie-parser")
 const User  = require("./models/User")
 const app = express();
