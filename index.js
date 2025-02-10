@@ -24,11 +24,11 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter = require("./routes/user");
 
-app.use("/api",authRouter);
-app.use("/api",profileRouter);
-app.use("/api",requestRouter);
-app.use("/api" , userRouter)
-app.get("/api" , (req,res)=>{
+app.use("/",authRouter);
+app.use("/",profileRouter);
+app.use("/",requestRouter);
+app.use("/" , userRouter)
+app.get("/" , (req,res)=>{
     res.send("App is working")
 })
 
