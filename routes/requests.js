@@ -27,8 +27,8 @@ const toUser = await findUserById(User,toUserId); //Custom function
 if(fromUserId.equals(toUserId)){
     return res.status(400).json({
         message : "You cannot send connection request to yourself",
-         
-    })
+           
+    }) 
 }
 
 

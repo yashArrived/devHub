@@ -2,6 +2,7 @@
 // const express = require("express");
 const express = require("express")
 const dbConnect = require("./config/database")
+const http = require("http")
 const cookieParser = require("cookie-parser")
 const User  = require("./models/User")
 const app = express();
@@ -29,11 +30,17 @@ app.use("/",requestRouter);
 app.use("/" , userRouter)
 
 
+
+const server = http.createServer(app);
+const socket = require("socket.io");
+const initialiseSocket = require("./utils/socket")
+
+initialiseSocket(server)
 //Database connection
 dbConnect().then(()=>
 {
     console.log("connected to db");
-    app.listen(3000 , ()=>{
+    server.listen(3000 , ()=>{
         console.log("running on 3000");
         
     });
